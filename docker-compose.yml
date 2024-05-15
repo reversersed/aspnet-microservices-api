@@ -1,0 +1,110 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    user: postgres
+    environment:
+      POSTGRES_PASSWORD: "ae59bae39e0ec2e74a884622ed0848e9671b4c1c1417425d17fbb60ab030de1c"
+    logging:
+      options:
+        max-size: 256m
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 2s
+      timeout: 3s
+      retries: 8
+
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    hostname: rabbitmq
+    restart: always
+    environment:      
+      - RABBITMQ_DEFAULT_USER=rmuser
+      - RABBITMQ_DEFAULT_PASS=rmpassword
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq/cookie
+    logging:
+      options:
+        max-size: 256m
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status"]
+      interval: 3s
+      timeout: 30s
+      retries: 10
+
+  gatewayapi:
+    image: ${DOCKER_REGISTRY-}gatewayapi
+    build:
+      context: .
+      dockerfile: GatewayApi/Dockerfile
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=5843184393c07dfa596f7d233e49fdebcdeb4c3cae440d5e19a1a3cc3f544ca8
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_HTTPS_Ports=8081
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+        - "9000:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+       
+  identityapi:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: IdentityApi/Dockerfile
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=5843184393c07dfa596f7d233e49fdebcdeb4c3cae440d5e19a1a3cc3f544ca8
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+        gatewayapi:
+            condition: service_started
+
+  eventsapi:
+    image: ${DOCKER_REGISTRY-}eventsapi
+    build:
+      context: .
+      dockerfile: EventsApi/Dockerfile
+    user: root
+    volumes:
+      - /var/www/testsite.dev/html/files/events:/app/files
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=5843184393c07dfa596f7d233e49fdebcdeb4c3cae440d5e19a1a3cc3f544ca8
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+        gatewayapi:
+            condition: service_started
+
+  coworkingapi:
+    image: ${DOCKER_REGISTRY-}coworkingapi
+    build:
+      context: .
+      dockerfile: CoworkingApi/Dockerfile
+    user: root
+    volumes:
+      - /var/www/testsite.dev/html/files/coworking:/app/files
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=5843184393c07dfa596f7d233e49fdebcdeb4c3cae440d5e19a1a3cc3f544ca8
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+        gatewayapi:
+            condition: service_started
+
+  newsapi:
+    image: ${DOCKER_REGISTRY-}newsapi
+    build:
+      context: .
+      dockerfile: NewsApi/Dockerfile
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=5843184393c07dfa596f7d233e49fdebcdeb4c3cae440d5e19a1a3cc3f544ca8
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+        gatewayapi:
+            condition: service_started

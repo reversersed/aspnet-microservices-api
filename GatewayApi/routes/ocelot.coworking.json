@@ -1,0 +1,128 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms/{id}", // From where we get a request
+      "UpstreamHttpMethod": [ "GET" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms/{id}", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms/{id}", // From where we get a request
+      "UpstreamHttpMethod": [ "DELETE" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms/{id}", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "admin"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms", // From where we get a request
+      "UpstreamHttpMethod": [ "GET" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms/{id}/reservations", // From where we get a request
+      "UpstreamHttpMethod": [ "GET" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms/{id}/reservations", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms/{id}/reservationhours", // From where we get a request
+      "UpstreamHttpMethod": [ "GET" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms/{id}/reservationhours", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms", // From where we get a request
+      "UpstreamHttpMethod": [ "POST" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "admin"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms/{id}", // From where we get a request
+      "UpstreamHttpMethod": [ "PATCH" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms/{id}", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "admin"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1/coworking/rooms/{id}/reserve", // From where we get a request
+      "UpstreamHttpMethod": [ "POST" ], // Allowed methods
+      "DownstreamPathTemplate": "/rooms/{id}/reserve", // Where we redirecting
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "coworkingapi",
+          "Port": 8080
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "admin"
+      }
+    }
+  ]
+}

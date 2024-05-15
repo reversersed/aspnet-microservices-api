@@ -1,0 +1,22 @@
+name: "Hackathon Backend CI"
+on: 
+  push:
+    branches: ["main"]
+jobs: 
+  deploy: 
+    runs-on: ubuntu-latest
+    steps:
+     - name: Deploy by SSH        
+       uses: appleboy/ssh-action@v1.0.3
+       with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          password: ${{secrets.SSH_PASSWORD}}
+          command_timeout: 60m
+          script: |
+            cd ${{secrets.PROJECT_FOLDER}};
+            git pull;
+            docker volume rm `docker volume ls -qf dangling=true`;
+            docker compose stop;
+            docker compose --parallel 1 build;
+            docker compose up --force-recreate --remove-orphans -d;
