@@ -21,11 +21,7 @@ This is backend part of the Hackathon app. Here's some info about architecture.
 <a name="links"></a>
 ## Links
 
-- <a href="https://github.com/AlexTTPr/BIM-Hackathon-front">Frontend part</a>
 - <a href="https://docs.google.com/document/d/1yLcOgYDsvwNaAI41V1dh4oqhZ8OpsfVverin7bREaQk/edit?usp=sharing">List of API's</a>
-### Hosted application
-- <a href="http://109.111.79.204:80/">Direct IP</a>
-- <a href="http://mtdtesting.ru">mtdtesting.ru</a>
 
 <a name="startup"></a>
 ## Startup
