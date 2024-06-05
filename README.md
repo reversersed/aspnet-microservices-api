@@ -25,7 +25,6 @@ This is backend part of the Hackathon app. Here's some info about architecture.
 
 <a name="startup"></a>
 ## Startup
-54
 After cloning a project, open Docker and type this into powershell:\
 `docker-compose build` to build a solution\
 `docker-compose up` to start an api\
